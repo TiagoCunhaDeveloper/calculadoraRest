@@ -4,6 +4,8 @@ import './Calculator.css'
 import Button from '../components/Button'
 import Display from '../components/Display'
 
+import api from '../services/api';
+
 const initialState = {
     displayValue: '0',
     clearDisplay: false,
@@ -31,11 +33,14 @@ export default class Calculator extends Component {
 
     backspaceValue(){
         let valor = this.state.displayValue.toString();
-        this.setState({ displayValue:valor.substr(0,valor.length - 1) == '' ? '0' : valor.substr(0,valor.length - 1)})
+        let values = this.state.values;
+
+        values[this.state.current] = valor.substr(0,valor.length - 1) == '' ? '0' : Number(valor.substr(0,valor.length - 1));
+
+        this.setState({ displayValue:valor.substr(0,valor.length - 1) == '' ? '0' : valor.substr(0,valor.length - 1),values})
     }
 
-    setOperation(operation) {
-        console.log(operation)
+    async setOperation(operation) {
         if (this.state.current === 0) {
             this.setState({ operation, current: 1, clearDisplay: true })
         } else {
@@ -43,13 +48,37 @@ export default class Calculator extends Component {
             const currentOperation = this.state.operation
 
             const values = [...this.state.values]
-            try {
-                values[0] = eval(`${values[0]} ${currentOperation} ${values[1]}`)
-            } catch(e) {
-                values[0] = this.state.values[0]
-            }
+            var rota = 0 ;
 
-            values[1] = 0
+            switch (currentOperation) {
+                case "+":
+                    rota = "/soma";
+                    break;
+                case "-":
+                    rota = "/sub";
+                    break;
+                case "/":
+                    rota = "/div";
+                    break;
+                case "*":
+                    rota = "/mult";
+                    break;
+            }
+            await api.get(rota, {
+                params: {
+                    numeroAtual: values[0],
+                    numeroDigitado: values[1]
+                }
+            })
+            .then(function (response) {
+                values[0] = response.data.resultado;
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+            .then(function () {
+                values[1] = 0;
+            });
 
             this.setState({
                 displayValue: values[0],
@@ -78,7 +107,6 @@ export default class Calculator extends Component {
             const values = [...this.state.values]
             values[i] = newValue
             this.setState({ values })
-            console.log(values)
         }
     }
 

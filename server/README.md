@@ -54,9 +54,23 @@ Backend simples para funcionamento de uma calculadora em node js utilizando type
 }
 ```
 
+## Logs
+Toda requisição feita gera um log que fica disponível no diretorio: src/utils/logs/info.log
+```js
+// Estrutura gerada do log
+{
+  level: 'info',
+  rota: '',
+  message: '',
+  service: 'Calculadora'
+}
+```
+
+
 ## Execução
 Para executar o projeto use:(Projeto rodando na porta http://localhost:3333)
 ```js
+npm install
 npm run start
 ```
 Para executar os testes use:

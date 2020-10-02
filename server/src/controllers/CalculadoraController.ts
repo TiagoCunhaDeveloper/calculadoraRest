@@ -2,12 +2,16 @@
 /* eslint-disable class-methods-use-this */
 import { Request, Response } from 'express';
 
-
+import createLog from '../utils/createLog';
 export default class CalculadoraController {
+
   soma(req: Request, res: Response) {
     const numeroAtual = Number(req.query.numeroAtual);
     const numeroDigitado = Number(req.query.numeroDigitado);
     const total = numeroAtual + numeroDigitado;
+
+    createLog('/soma','Soma realizada: ' + numeroAtual + ' + ' + numeroDigitado + ' = ' + total);
+
     return res.json({resultado: total});
   }
 
@@ -15,6 +19,9 @@ export default class CalculadoraController {
     const numeroAtual = Number(req.query.numeroAtual);
     const numeroDigitado = Number(req.query.numeroDigitado);
     const total = numeroAtual - numeroDigitado;
+
+    createLog('/sub','Subtração realizada: ' + numeroAtual + ' - ' + numeroDigitado + ' = ' + total);
+
     return res.json({resultado: total});
   }
 
@@ -30,6 +37,8 @@ export default class CalculadoraController {
       total++;
     }
 
+    createLog('/div','Divisão por subtração realizada: ' + numeroAtual + ' / ' + numeroDigitado + ' = ' + total);
+
     return res.json({resultado:total});
   }
 
@@ -43,6 +52,9 @@ export default class CalculadoraController {
 
     }
 
+    createLog('/mult','Multiplicação realizada: ' + numeroAtual + ' * ' + numeroDigitado + ' = ' + total);
+
     return res.json({resultado:total});
   }
+
 }

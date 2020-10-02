@@ -22,7 +22,13 @@ export default class CalculadoraController {
     const numeroAtual = Number(req.query.numeroAtual);
     const numeroDigitado = Number(req.query.numeroDigitado);
 
-    const total = numeroAtual / numeroDigitado;
+    let total = 0;
+    let numero = numeroAtual;
+
+    while (numero > 0) {
+      numero -= numeroDigitado;
+      total++;
+    }
 
     return res.json({resultado:total});
   }
@@ -30,8 +36,12 @@ export default class CalculadoraController {
   mult(req: Request, res: Response) {
     const numeroAtual = Number(req.query.numeroAtual);
     const numeroDigitado = Number(req.query.numeroDigitado);
+    let total = 0;
 
-    const total = numeroAtual * numeroDigitado;
+    for (let index = 0; index < numeroDigitado; index++) {
+      total += numeroAtual;
+
+    }
 
     return res.json({resultado:total});
   }
